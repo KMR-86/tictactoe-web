@@ -5,6 +5,7 @@ var gameBoard = new Array(9);
 var isGameFinished=false;
 var huPlayer;
 var aiPlayer;
+var gameNo=0;
 startGame();
 
 function startGame(){
@@ -24,6 +25,11 @@ function startGame(){
         huPlayer="O";
         aiPlayer="X";
     }
+    if(gameNo%2==0){
+        x=minimax(gameBoard,aiPlayer);
+        makemove(x.index,aiPlayer);
+    }
+    gameNo++;
     
 }
 function clicked(cell){
@@ -33,26 +39,28 @@ function clicked(cell){
     console.log(isGameFinished);
     if(document.getElementById(id).innerText=="" && !checkIfGameFinished(gameBoard)[0]){
         if(whichPlayerFlag%2==0){
-            document.getElementById(id).innerText="X";
-            gameBoard[id]="X";
+            document.getElementById(id).innerText=huPlayer;
+            gameBoard[id]=huPlayer;
         }
         else{
-            document.getElementById(id).innerText="O";
-            gameBoard[id]="O";
+            document.getElementById(id).innerText=huPlayer;
+            gameBoard[id]=huPlayer;
         }
         whichPlayerFlag++;
         console.log(gameBoard);
+        
+        if(checkIfGameFinished(gameBoard)[0]){
+            console.log("gameOver");
+        }
+        else if(emptySquares().length!=0){
+            x=minimax(gameBoard,aiPlayer);
+            makemove(x.index,aiPlayer);
+        }
+        else{
+            console.log("Game Drawn");
+        }
     }
-    if(checkIfGameFinished(gameBoard)[0]){
-        console.log("gameOver");
-    }
-    else if(emptySquares().length!=0){
-        x=minimax(gameBoard,aiPlayer);
-        makemove(x.index,aiPlayer);
-    }
-    else{
-        console.log("Game Drawn");
-    }
+
     
 }
 function makemove(cellno,move){
